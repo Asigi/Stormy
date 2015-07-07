@@ -88,8 +88,8 @@ public class CurrentWeather {
         this.myIcon = myIcon;
     }
 
-    public double getMyTemperature() {
-        return myTemperature;
+    public int getMyTemperature() {
+        return (int) Math.round(myTemperature);
     }
 
     public void setMyTemperature(double myTemperature) {
@@ -104,8 +104,9 @@ public class CurrentWeather {
         this.myHumidity = myHumidity;
     }
 
-    public double getMyPrecipChance() {
-        return myPrecipChance;
+    public int getMyPrecipChance() {
+        double precipPercentage = myPrecipChance * 100;
+        return (int) Math.round(precipPercentage);
     }
 
     public void setMyPrecipChance(double myPrecipChance) {

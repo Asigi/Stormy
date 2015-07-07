@@ -1,11 +1,16 @@
 package arshsingh93.stormy;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
@@ -19,26 +24,58 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private CurrentWeather myCurWeather;
 
+    @InjectView(R.id.timeLabel) TextView myTimeLabel; //using butterknife
+    @InjectView(R.id.temperatureLabel) TextView myTemperatureLabel;
+    @InjectView(R.id.humidityValue) TextView myHumidityValue;
+    @InjectView(R.id.precipValue) TextView myPrecipValue;
+    @InjectView(R.id.summaryLabel) TextView mySummaryLabel;
+    @InjectView(R.id.iconImageView) ImageView myIconImageView;
+    @InjectView(R.id.refreshImageView) ImageView myRefreshImageView;
+    @InjectView(R.id.progressBar) ProgressBar myProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this); //wrote this so that butterknife would run
 
+        myProgressBar.setVisibility(View.INVISIBLE); //originally not seen.
+
+        final double latitude = 47.432737;
+        final double longitude = -122.423;
+
+        myRefreshImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getForecast(latitude, longitude);
+            }
+        });
+
+        getForecast(latitude, longitude);
+
+        Log.d(TAG, "Main UI code is running");
+
+    }
+
+    private void getForecast(double theLat, double theLong) {
         String apiKey = "18131678eb944e61639caac84cb622b6";
-        double latitude = 37.8267;
-        double longitude = -122.423;
+
         String forecastURL = "https://api.forecast.io/forecast/" + apiKey +
-                "/" + latitude + "," + longitude;
-        
-        
+                "/" + theLat + "," + theLong;
+
+
         if (isNetworkAvailable()) {
+            toggleRefresh();
+
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(forecastURL)
@@ -47,16 +84,35 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    alertUserAboutError();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+
                     try {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                                myCurWeather = getCurrentDetails(jsonData);
+                            myCurWeather = getCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() { //this code will cause whatever is in the inner run method to run on the main thread.
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
                         } else {
                             alertUserAboutError();
                         }
@@ -72,9 +128,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
         }
-        Log.d(TAG, "Main UI code is running");
+    }
 
+    private void toggleRefresh() {
+        if(myProgressBar.getVisibility() == View.INVISIBLE) {
+            myProgressBar.setVisibility(View.VISIBLE);
+            myRefreshImageView.setVisibility(View.INVISIBLE);
+        } else {
+            myProgressBar.setVisibility(View.INVISIBLE);
+            myRefreshImageView.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void updateDisplay() {
+        myTemperatureLabel.setText(myCurWeather.getMyTemperature() + "");
+        myTimeLabel.setText("At " + myCurWeather.getFormattedTime() + " it will be");
+        myHumidityValue.setText(myCurWeather.getMyHumidity() + "");
+        myPrecipValue.setText(myCurWeather.getMyPrecipChance() + "%");
+        mySummaryLabel.setText(myCurWeather.getMySummary());
+        Drawable drawable = getResources().getDrawable(myCurWeather.getIconId());
+        myIconImageView.setImageDrawable(drawable);
 
     }
 
