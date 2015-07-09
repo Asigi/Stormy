@@ -1,10 +1,12 @@
-package arshsingh93.stormy;
+package arshsingh93.stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import arshsingh93.stormy.R;
 
 /**
  * Created by Student on 7/4/2015.

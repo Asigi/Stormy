@@ -1,13 +1,15 @@
-package arshsingh93.stormy;
+package arshsingh93.stormy.weather;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import arshsingh93.stormy.R;
+
 /**
  * Created by Student on 7/5/2015.
  */
-public class CurrentWeather {
+public class Current {
 
     private String myIcon;
     private long myTime;
@@ -49,39 +51,7 @@ public class CurrentWeather {
     }
 
     public int getIconId() {
-        //clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
-        int iconId = R.drawable.clear_day;
-
-        if (myIcon.equals("clear-day")) {
-            iconId = R.drawable.clear_day;
-        } else if(myIcon.equals("clear-night")) {
-            iconId = R.drawable.clear_night;
-        } else if (myIcon.equals("rain")) {
-            iconId = R.drawable.rain;
-        }
-        else if (myIcon.equals("snow")) {
-            iconId = R.drawable.snow;
-        }
-        else if (myIcon.equals("sleet")) {
-            iconId = R.drawable.sleet;
-        }
-        else if (myIcon.equals("wind")) {
-            iconId = R.drawable.wind;
-        }
-        else if (myIcon.equals("fog")) {
-            iconId = R.drawable.fog;
-        }
-        else if (myIcon.equals("cloudy")) {
-            iconId = R.drawable.cloudy;
-        }
-        else if (myIcon.equals("partly-cloudy-day")) {
-            iconId = R.drawable.partly_cloudy;
-        }
-        else if (myIcon.equals("partly-cloudy-night")) {
-            iconId = R.drawable.cloudy_night;
-        }
-
-        return iconId;
+        return Forecast.getIconId(myIcon);
     }
 
     public void setMyIcon(String myIcon) {
