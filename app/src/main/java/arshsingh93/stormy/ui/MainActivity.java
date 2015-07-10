@@ -61,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         myProgressBar.setVisibility(View.INVISIBLE); //originally not seen.
 
-        final double latitude = 47.432737;
+        final double latitude = 47.432737; //Singh Sabha coords
         final double longitude = -122.423;
+        //final double latitude = 37.8267; alcatraz coords
+        //final double longitude = -122.423;
 
         myRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
-
                 }
             });
 
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject jsonHour = data.getJSONObject(i);
             Hour hour = new Hour();
 
-            hour.setSummary(jsonHour.getString("summary"));;
+            hour.setSummary(jsonHour.getString("summary"));
             hour.setTemperature(jsonHour.getDouble("temperature"));
             hour.setIcon(jsonHour.getString("icon"));
             hour.setTime(jsonHour.getLong("time"));

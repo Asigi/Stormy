@@ -27,7 +27,6 @@
         android:layout_toRightOf="@+id/circleImageView"
         android:layout_toEndOf="@+id/circleImageView"
         android:paddingLeft="10dp"
-
         android:src="@drawable/clear_day" />
 
     <TextView
@@ -52,6 +51,5 @@
         android:layout_alignLeft="@+id/circleImageView"
         android:gravity="center"
         android:textColor="#f25019"
-
         tools:text="100"/>
 </RelativeLayout>

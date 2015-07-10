@@ -26,7 +26,6 @@ public class DayAdapter extends BaseAdapter{
         myDays = days;
     }
 
-
     @Override
     public int getCount() {
         return myDays.length;
@@ -39,7 +38,7 @@ public class DayAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        return 0; //we arent going to use this. Tag items for easy reference
+        return 0; //we arent going to use this. It is used for taggin items for easy reference
     }
 
     @Override
@@ -64,14 +63,20 @@ public class DayAdapter extends BaseAdapter{
 
         holder.iconImageView.setImageResource(day.getIconId());
         holder.temperatureLabel.setText(day.getTemperatureMax() + "");
-        holder.dayLabel.setText(day.getDayOfTheWeek());
 
+        if (position == 0) {
+            holder.dayLabel.setText("Today");
+        }else {
+            holder.dayLabel.setText(day.getDayOfTheWeek());
+        }
 
         return convertView;
     }
 
 
-
+    /**
+     * Holds the views that we add to the list item layout
+     */
     private static class ViewHolder {
         ImageView iconImageView;  //public by default
         TextView temperatureLabel;
