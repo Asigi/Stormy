@@ -24,7 +24,6 @@ public class DayAdapter extends BaseAdapter{
     public DayAdapter(Context context, Day[] days) {
         myContext= context;
         myDays = days;
-
     }
 
 

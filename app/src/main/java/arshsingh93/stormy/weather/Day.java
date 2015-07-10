@@ -1,5 +1,8 @@
 package arshsingh93.stormy.weather;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -7,7 +10,7 @@ import java.util.TimeZone;
 /**
  * Created by Student on 7/8/2015.
  */
-public class Day {
+public class Day implements Parcelable{
 
     private long myTime;
     private String mySummary;
@@ -66,5 +69,44 @@ public class Day {
 
         return formatter.format(dateTime);
     }
+
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(myTime);
+        dest.writeString(mySummary);
+        dest.writeDouble(myTemperatureMax);
+        dest.writeString(myIcon);
+        dest.writeString(myTimezone);
+
+    }
+
+    private Day(Parcel in) {
+        myTime = in.readLong();
+        mySummary = in.readString();
+        myTemperatureMax = in.readDouble();
+        myIcon = in.readString();
+        myTimezone = in.readString();
+    }
+
+    public Day() {}
+
+    public static final Creator<Day> CREATOR = new Creator<Day>() {
+        @Override
+        public Day createFromParcel(Parcel source) {
+            return new Day(source);
+        }
+
+        @Override
+        public Day[] newArray(int size) {
+            return new Day[size];
+        }
+    };
 
 }
