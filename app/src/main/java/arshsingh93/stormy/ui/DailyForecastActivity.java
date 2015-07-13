@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -32,6 +35,25 @@ public class DailyForecastActivity extends ListActivity {
 
     }
 
+    /**This is the code to make a toast pop up when a user clicks on an item.
+     *
+     * @param l is the listview where the tap occured
+     * @param v is the specific item that was clicked
+     * @param position is the numerical index of the item in the list
+     * @param id is an opitonal item id that we can set though we arent using it.
+     */
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l,v,position,id);
+
+        String dayOfTheWeek = myDays[position].getDayOfTheWeek();
+        String conditions = myDays[position].getSummary();
+        String highTemp = myDays[position].getTemperatureMax() + "";
+        String message = String.format("On %s the high will be %s and it will be %s",
+                dayOfTheWeek, highTemp, conditions);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+
+    }
 
 
 

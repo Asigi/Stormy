@@ -1,6 +1,7 @@
 package arshsingh93.stormy.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,19 +14,32 @@ import arshsingh93.stormy.weather.Hour;
  */
 public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder> {
 
-    @Override
-    public HourViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return null;
+    private Hour[] myHours;
+
+    public HourAdapter(Hour[] hours) {
+        myHours = hours;
     }
 
-    @Override
-    public void onBindViewHolder(HourViewHolder hourViewHolder, int i) {
 
+    @Override
+    public HourViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.hourly_list_item, parent,false);
+        HourViewHolder viewHolder = new HourViewHolder(view);
+
+        return viewHolder;
+    }
+
+
+
+    @Override
+    public void onBindViewHolder(HourViewHolder holder, int position) {
+        holder.bindHour(myHours[position]);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return myHours.length;
     }
 
     public class HourViewHolder extends RecyclerView.ViewHolder {
