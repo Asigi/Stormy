@@ -1,11 +1,14 @@
 package arshsingh93.stormy.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import arshsingh93.stormy.R;
 import arshsingh93.stormy.weather.Hour;
 
@@ -15,8 +18,10 @@ import arshsingh93.stormy.weather.Hour;
 public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder> {
 
     private Hour[] myHours;
+    private Context myContext;
 
-    public HourAdapter(Hour[] hours) {
+    public HourAdapter(Context context, Hour[] hours) {
+        myContext = context;
         myHours = hours;
     }
 
@@ -42,7 +47,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
         return myHours.length;
     }
 
-    public class HourViewHolder extends RecyclerView.ViewHolder {
+    public class HourViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         public TextView myTimeLabel;
         public TextView mySummaryLabel;
@@ -57,6 +63,7 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
             myTemperatureLabel = (TextView) itemView.findViewById(R.id.temperatureLabel);
             myIconImageView = (ImageView) itemView.findViewById(R.id.iconImageView);
 
+            itemView.setOnClickListener(this);
         }
 
         public void bindHour(Hour hour) {
@@ -68,6 +75,16 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
         }
 
 
+        @Override
+        public void onClick(View v) {
+            String time = myTimeLabel.getText().toString();
+            String temperature = myTemperatureLabel.getText().toString();
+            String summary = mySummaryLabel.getText().toString();
+            String message = String.format("At %s is will be %s and %s",
+                    time, temperature, summary);
+
+            Toast.makeText(myContext, message, Toast.LENGTH_LONG).show();
+        }
     }
 }
 
